@@ -4,7 +4,7 @@ import './App.css'
 const API_BASE_URL = 'http://localhost:8000'
 
 function App() {
-    const [currentView, setCurrentView] = useState('chats') // 'chats' or 'conversation'
+    const [currentView, setCurrentView] = useState('conversation') // 'chats' or 'conversation'
     const [messages, setMessages] = useState([
         { role: 'assistant', content: 'Hello! I\'m your AI assistant. How can I help you today?' }
     ])
