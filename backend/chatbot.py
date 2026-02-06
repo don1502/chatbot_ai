@@ -41,7 +41,7 @@ def query_gemini_api(messages: List[Dict]) -> str:
     
     try:
         gemini.configure(api_key=GOOGLE_API_KEY)
-        model = gemini.GenerativeModel('gemini-2.0-flash-exp')
+        model = gemini.GenerativeModel('gemini-1.5-flash')
         
         # Convert messages to Gemini format
         chat_history = []
