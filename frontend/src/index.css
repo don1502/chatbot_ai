@@ -1,55 +1,45 @@
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: dark;
-  color: #ffffff;
-  background-color: #1a1a1a;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply m-0 min-w-[320px] min-h-screen bg-gray-900 overflow-x-hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    @apply w-full min-h-screen flex justify-center items-center bg-gray-900;
+  }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #8E8E93 transparent;
+  }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background: #1a1a1a;
-  overflow-x: hidden;
-}
+  .scrollbar-thin::-webkit-scrollbar {
+    @apply w-1;
+  }
 
-#root {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #1a1a1a;
-}
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
 
-/* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
-  width: 6px;
-}
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-500 rounded-sm;
+  }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #8E8E93;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #A8A8A8;
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
 }

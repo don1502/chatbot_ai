@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import './App.css'
 
 const API_BASE_URL = 'http://localhost:8000'
 
 function App() {
-    const [currentView, setCurrentView] = useState('conversation') // 'chats' or 'conversation'
     const [messages, setMessages] = useState([
         { role: 'assistant', content: 'Hello! I\'m your AI assistant. How can I help you today?' }
     ])
@@ -12,42 +10,6 @@ function App() {
     const [isLoading, setIsLoading] = useState(false)
     const [isTyping, setIsTyping] = useState(false)
     const messagesEndRef = useRef(null)
-
-    // Mock chat list data
-    const chatList = [
-        {
-            id: 1,
-            name: 'AI Assistant',
-            lastMessage: 'Hello! How can I help you today?',
-            time: '12:35',
-            unread: 0,
-            avatar: '🤖'
-        },
-        {
-            id: 2,
-            name: 'Sara Sanders',
-            lastMessage: 'Can you buy me dinner?',
-            time: '12:35',
-            unread: 100,
-            avatar: '👩'
-        },
-        {
-            id: 3,
-            name: 'Doris Diaz',
-            lastMessage: 'Read this article, it is so awesome...',
-            time: '12:35',
-            unread: 99,
-            avatar: '👩‍🦱'
-        },
-        {
-            id: 4,
-            name: 'Kathy Gomez',
-            lastMessage: 'Sounds like a good idea!',
-            time: '12:35',
-            unread: 3,
-            avatar: '👩‍💼'
-        }
-    ]
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -121,107 +83,60 @@ function App() {
         }).toLowerCase()
     }
 
-    const renderChatsList = () => (
-        <div className="chats-view">
-            {/* Header */}
-            <div className="app-header">
-                <div className="profile-section">
-                    <div className="profile-avatar">👨</div>
-                </div>
-                <h1>Chats</h1>
-                <button className="add-button">+</button>
-            </div>
-
-            {/* Search Bar */}
-            <div className="search-container">
-                <div className="search-bar">
-                    <span className="search-icon">🔍</span>
-                    <input type="text" placeholder="Search" />
-                </div>
-            </div>
-
-            {/* Chat List */}
-            <div className="chat-list">
-                {chatList.map((chat) => (
-                    <div
-                        key={chat.id}
-                        className={`chat-item ${chat.id === 1 ? 'active' : ''}`}
-                        onClick={() => setCurrentView('conversation')}
-                    >
-                        <div className="chat-avatar">{chat.avatar}</div>
-                        <div className="chat-content">
-                            <div className="chat-name">{chat.name}</div>
-                            <div className="chat-preview">{chat.lastMessage}</div>
-                        </div>
-                        <div className="chat-meta">
-                            <div className="chat-time">{chat.time}</div>
-                            {chat.unread > 0 && (
-                                <div className="unread-badge">
-                                    {chat.unread > 99 ? '99+' : chat.unread}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Bottom Navigation */}
-            <div className="bottom-nav">
-                <button className="nav-button active">🎙️</button>
-                <button className="nav-button">📷</button>
-                <button className="nav-button">⚏</button>
-                <button className="nav-button">⚙️</button>
-            </div>
-        </div>
-    )
-
     const renderConversation = () => (
-        <div className="conversation-view">
+        <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="conversation-header">
-                <button
-                    className="back-button"
-                    onClick={() => setCurrentView('chats')}
-                >
-                    ←
-                </button>
-                <div className="contact-info">
-                    <div className="contact-avatar">🤖</div>
-                    <div className="contact-details">
-                        <div className="contact-name">AI Assistant</div>
-                        <div className="contact-status">
+            <div className="flex items-center justify-center p-4 bg-neumorphic-bg border-b border-neumorphic-surface">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-neumorphic-surface flex items-center justify-center text-lg shadow-neumorphic-outer-small">
+                        🤖
+                    </div>
+                    <div className="flex flex-col">
+                        <div className="text-base font-semibold text-neumorphic-text-primary">
+                            AI Assistant
+                        </div>
+                        <div className="text-xs text-neumorphic-text">
                             {isTyping ? 'Typing...' : 'Online'}
                         </div>
                     </div>
                 </div>
-                <button className="call-button">📞</button>
             </div>
 
             {/* Messages */}
-            <div className="messages-container">
-                <div className="date-separator">Today</div>
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 scrollbar-thin">
+                <div className="text-center text-neumorphic-text text-xs mb-2">
+                    Today
+                </div>
 
                 {messages.map((message, index) => (
                     <div
                         key={index}
-                        className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+                        className={`flex flex-col max-w-[80%] animate-fade-in-up ${
+                            message.role === 'user' ? 'self-end' : 'self-start'
+                        }`}
                     >
-                        <div className="message-bubble">
+                        <div className={`px-4 py-3 rounded-[18px] text-base leading-[1.4] break-words whitespace-pre-wrap mb-1 ${
+                            message.role === 'user' 
+                                ? 'bg-neumorphic-accent text-white rounded-br-md' 
+                                : 'bg-neumorphic-surface text-white rounded-bl-md shadow-neumorphic-inner'
+                        }`}>
                             {message.content}
                         </div>
-                        <div className="message-time">
+                        <div className={`text-xs text-neumorphic-text mt-1 ${
+                            message.role === 'user' ? 'text-right' : 'text-left'
+                        }`}>
                             {formatTime(new Date())}
                         </div>
                     </div>
                 ))}
 
                 {isTyping && (
-                    <div className="message assistant-message">
-                        <div className="message-bubble typing">
-                            <div className="typing-indicator">
-                                <span></span>
-                                <span></span>
-                                <span></span>
+                    <div className="flex flex-col max-w-[80%] self-start animate-fade-in-up">
+                        <div className="bg-neumorphic-surface text-white rounded-[18px] px-4 py-3 rounded-bl-md shadow-neumorphic-inner">
+                            <div className="flex items-center gap-1 py-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-neumorphic-text animate-typing"></span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-neumorphic-text animate-typing" style={{animationDelay: '-0.16s'}}></span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-neumorphic-text animate-typing" style={{animationDelay: '-0.32s'}}></span>
                             </div>
                         </div>
                     </div>
@@ -230,44 +145,49 @@ function App() {
             </div>
 
             {/* Input Area */}
-            <div className="input-area">
-                <button className="emoji-button">😊</button>
-                <div className="message-input-container">
-                    <input
-                        type="text"
-                        value={inputMessage}
-                        onChange={(e) => setInputMessage(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Type a message"
-                        disabled={isLoading}
-                        className="message-input"
-                    />
-                    <button className="attachment-button">📎</button>
-                    <button className="camera-button">📷</button>
+            <div className="flex items-end gap-3 p-4 bg-neumorphic-bg border-t border-neumorphic-surface">
+                <button className="w-10 h-10 rounded-full bg-neumorphic-surface border-none text-white text-lg cursor-pointer shadow-neumorphic-outer-small transition-all duration-200 hover:transform hover:-translate-y-0.5 flex items-center justify-center">
+                    😊
+                </button>
+                <div className="flex-1 relative">
+                    <div className="flex items-center bg-neumorphic-surface rounded-[24px] px-4 py-3 shadow-neumorphic-inner-large min-h-[48px]">
+                        <input
+                            type="text"
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder="Type a message..."
+                            disabled={isLoading}
+                            className="flex-1 bg-transparent border-none outline-none text-white text-base placeholder-gray-400 leading-5"
+                        />
+                        <div className="flex items-center gap-2 ml-2">
+                            <button className="w-7 h-7 rounded-lg border-none bg-transparent text-gray-400 text-sm cursor-pointer hover:text-white transition-colors duration-200 flex items-center justify-center">
+                                📎
+                            </button>
+                            <button className="w-7 h-7 rounded-lg border-none bg-transparent text-gray-400 text-sm cursor-pointer hover:text-white transition-colors duration-200 flex items-center justify-center">
+                                📷
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <button
                     onClick={sendMessage}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="send-button"
+                    className="w-12 h-12 rounded-full bg-neumorphic-accent border-none text-white text-xl cursor-pointer shadow-neumorphic-outer transition-all duration-200 hover:transform hover:-translate-y-0.5 hover:shadow-neumorphic-outer-large disabled:bg-neumorphic-surface disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
                 >
-                    🎙️
+                    {isLoading ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                        '🎙️'
+                    )}
                 </button>
             </div>
         </div>
     )
 
     return (
-        <div className="app">
-            <div className="status-bar">
-                <span className="time">9:41</span>
-                <div className="status-icons">
-                    <span>📶</span>
-                    <span>📶</span>
-                    <span>🔋</span>
-                </div>
-            </div>
-
-            {currentView === 'chats' ? renderChatsList() : renderConversation()}
+        <div className="flex flex-col h-screen w-full bg-neumorphic-bg overflow-hidden">
+            {renderConversation()}
         </div>
     )
 }
