@@ -1,10 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]
 pydantic
-langchain
-langchain_community
-langchain-core
-langchain-groq
-groq
 python-dotenv
 google-generativeai
